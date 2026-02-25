@@ -1,8 +1,8 @@
-# 🧠 Prompt Registry (PromptOps)
+# Prompt Registry (PromptOps)
 
 Este repositório centraliza prompts. Ele armazena, versiona e distribui **Prompts como Código**.
 
-## 📂 Estrutura de Pastas
+## Estrutura de Pastas
 
 *   `registry.yaml`: O "cérebro" do repositório. Contém metadados, descrições e caminhos para todos os prompts aprovados.
 *   `dotnet/`, `python/`, etc.: Pastas organizadas por tecnologia.
@@ -11,7 +11,7 @@ Este repositório centraliza prompts. Ele armazena, versiona e distribui **Promp
 *   `*/readme.md`: descrição do prompt.
 
 
-## 🚀 Como Usar
+## Como Usar
 
 ### 1. Configuração no seu Projeto (Recomendado)
 
@@ -23,7 +23,7 @@ git submodule add git@github.com:sua-org/prompts.git .prompts
 
 Isso criará uma pasta oculta `.prompts` contendo toda a biblioteca.
 
-## 🛠️ Contribuindo com Novos Prompts
+## Contribuindo com Novos Prompts
 
 1.  Crie uma nova pasta para o seu prompt (ex: `react/component-generator`).
 2.  Crie o arquivo `prompt.yaml` com as instruções detalhadas.
