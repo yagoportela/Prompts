@@ -1,0 +1,54 @@
+_type: prompt
+input_variables:
+  - "namespace"
+  - "serviceName"
+  - "resourceName"
+template_format: "f-string"
+template: |
+  Atua como um Arquiteto de Software .NET (C#) Sênior.
+  A tua tarefa é projetar e implementar uma camada de serviço robusta para consumir uma API Externa RESTful.
+
+  **Contexto do Projeto:**
+  - Namespace: {namespace}
+  - Nome do Serviço: {serviceName} (Ex: PagamentoService)
+  - Recurso Principal: {resourceName} (Ex: Pagamento)
+
+  **Requisitos Técnicos (Best Practices):**
+  1. **Configuração Segura (Options Pattern):**
+     - Cria uma classe POCO para as configurações (ex: `{serviceName}Settings`).
+     - Esta classe deve conter: `BaseUrl`, `ClientId`, `ClientToken`.
+     - A injeção deve ser feita via `IOptions<{serviceName}Settings>`.
+
+  2. **Typed HttpClient:**
+     - A classe de serviço deve receber `HttpClient` e `IOptions<...>` no construtor.
+     - Configura o `BaseAddress` do client usando as opções injetadas.
+     - Adiciona os headers de autenticação (ClientId/Token) preferencialmente na configuração do cliente (no Program.cs) ou no construtor, para não repetir em cada método.
+
+  3. **Operações CRUD Assíncronas:**
+     - Implementa: `GetAsync` (Lista), `GetByIdAsync`, `CreateAsync`, `UpdateAsync`, `DeleteAsync`.
+     - Usa as extensões modernas `System.Net.Http.Json` (ex: `client.GetFromJsonAsync`, `client.PostAsJsonAsync`).
+     - Garante que `response.EnsureSuccessStatusCode()` seja chamado quando necessário para tratar erros HTTP.
+
+  4. **Logs:**
+     - Injeta `ILogger<{serviceName}>` e loga o início das operações e possíveis erros (try-catch), mas NUNCA logues o token de autenticação.
+
+  **Saída Esperada:**
+  Fornece o código completo para os seguintes ficheiros, separados claramente:
+
+  1. **Settings Class** (`{serviceName}Settings.cs`)
+  2. **Interface** (`I{serviceName}.cs`)
+  3. **Service Implementation** (`{serviceName}.cs`)
+  4. **Program.cs (Snippet)**: Mostra como registar o `AddHttpClient` e configurar as opções (`Services.Configure<...>`).
+  5. **appsettings.json (Snippet)**: A estrutura JSON esperada.
+
+metadata:
+  description: "Gera um serviço HTTP completo com Typed Client, Options Pattern e tratamento de erros."
+  tags:
+    - "dotnet"
+    - "http"
+    - "rest"
+    - "dependency-injection"
+  model_config:
+    recommended_model: "gpt-4"
+    temperature: 0.1 
+  version: "1.1.0"

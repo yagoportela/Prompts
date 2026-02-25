@@ -1,0 +1,32 @@
+registry_version: "1.0.0"
+last_updated: "2024-02-10"
+last_updated: "2024-02-25"
+
+agents:
+  dotnet:
+    HttpService:
+      description: "Gera um serviço HTTP completo (CRUD) implementando Best Practices (Options Pattern, Typed HttpClient, DI) para .NET. Utilize quando for necessário criar integrações com APIs externas."
+      version: "1.0.0"
+      path: "./dotnet/http-service"
+      entry_point: "prompt.yaml"
+      tested_models:
+        - "gpt-4"
+        - "gpt-4o"
+      tags:
+        - "webapi"
+        - "http-client"
+        - "dependency-injection"
+      
+    UnitTestsXunit:
+      description: "Gera testes unitários robustos usando xUnit, Moq e Bogus para classes .NET. Utilize para testar classes de serviço ou lógica de negócios."
+      version: "1.0.0"
+      path: "./dotnet/unit-tests-xunit/prompt.yaml"
+      entry_point: "prompt.yaml"
+      tested_models:
+        - "gpt-4"
+        - "gpt-3.5-turbo"
+      tags:
+        - "testing"
+        - "xunit"
+        - "bogus"
+        - "moq"
