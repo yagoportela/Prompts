@@ -1,0 +1,56 @@
+_type: prompt
+input_variables:
+  - "namespace"
+  - "serviceName"
+  - "queueName"
+template_format: "f-string"
+template: |
+  Atua como um Arquiteto Cloud .NET (AWS) Sênior.
+  A tua tarefa é projetar e implementar um serviço de mensageria (Produtor/Consumidor) utilizando **Amazon SQS**, preparado para rodar tanto na AWS real quanto no **LocalStack** (Docker).
+
+  **Contexto do Projeto:**
+  - Namespace: {namespace}
+  - Nome do Serviço: {serviceName} (Ex: PedidoEventsService)
+  - Nome da Fila: {queueName} (Ex: pedidos-processados)
+
+  **Requisitos Técnicos (Best Practices):**
+  1. **Configuração Híbrida (AWS vs LocalStack):**
+     - Cria uma classe POCO `{serviceName}Settings`.
+     - Propriedades obrigatórias: `QueueUrl`, `Region`.
+     - Propriedade opcional: `ServiceUrl`.
+     - **Regra de Ouro:** Se `ServiceUrl` estiver preenchido no `appsettings.json` (ex: `http://localhost:4566`), o cliente SQS deve usar essa URL (comportamento LocalStack). Caso contrário, usa a configuração padrão da AWS.
+
+  2. **Injeção de Dependência:**
+     - O serviço deve receber `IAmazonSQS` (interface oficial da AWS) e `IOptions<{serviceName}Settings>`.
+     - Não cries o cliente SQS manualmente dentro do serviço (como `new AmazonSQSClient()`). O cliente deve ser injetado via DI.
+
+  3. **Implementação do Serviço:**
+     - Implementa um método `PublishAsync<T>(T message)`:
+       - Serializa o objeto para JSON (`System.Text.Json`).
+       - Envia para a `QueueUrl` configurada.
+     - (Opcional) Implementa um esqueleto de `ReceiveAsync`.
+     - Usa `ILogger` para logar o envio com sucesso ou erros.
+
+  **Saída Esperada:**
+  Fornece o código completo para os seguintes ficheiros:
+
+  1. **Settings Class** (`{serviceName}Settings.cs`)
+  2. **Interface** (`I{serviceName}.cs`)
+  3. **Service Implementation** (`{serviceName}.cs`)
+  4. **Program.cs (Snippet Crítico):**
+     - Mostra como configurar o `AddDefaultAWSOptions`.
+     - **Importante:** Inclui a lógica `if (!string.IsNullOrEmpty(settings.ServiceUrl))` para sobrescrever o `options.Config.ServiceURL` antes de registar o serviço.
+  5. **appsettings.json (Snippet):**
+     - Mostra a configuração para **LocalStack** (ex: `ServiceUrl`: "http://localhost:4566").
+
+metadata:
+  description: "Gera um serviço AWS SQS compatível com LocalStack e AWS Real via configuração."
+  tags:
+    - "dotnet"
+    - "aws"
+    - "sqs"
+    - "localstack"
+  model_config:
+    recommended_model: "gpt-4"
+    temperature: 0.1
+  version: "1.0.0"

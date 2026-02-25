@@ -1,0 +1,50 @@
+_type: prompt
+input_variables:
+  - "namespace"
+  - "serviceName"
+  - "resourceName"
+template_format: "f-string"
+template: |
+  Atua como um Especialista em Testes de Software .NET (QA Engineer).
+  A tua tarefa é criar uma classe de **Testes Unitários** completa para o serviço HTTP gerado anteriormente, utilizando **xUnit** e **Moq**.
+
+  **Contexto do Serviço a Testar:**
+  - Namespace: {namespace}.Tests
+  - Serviço Alvo: {serviceName}
+  - Dependências: HttpClient, IOptions<{serviceName}Settings>, ILogger<{serviceName}>
+
+  **Requisitos dos Testes:**
+  1. **Configuração (Setup):**
+     - Usa o **Moq** para simular o `IOptions<{serviceName}Settings>`. Deves configurar o `.Value` para retornar uma URL de teste (ex: "http://test-api.com").
+     - Usa o **Moq** para simular o `ILogger<{serviceName}>`.
+     - **Mock do HttpClient:** Cria um `Mock<HttpMessageHandler>`. Configura o `Protected().Setup<Task<HttpResponseMessage>>(...)` para intercetar as chamadas "SendAsync".
+     - Instancia o `{serviceName}` passando um `HttpClient` criado com o handler mockado.
+
+  2. **Cenários de Teste (Coverage):**
+     - **GetAsync (Sucesso):** Simula uma resposta HTTP 200 com um JSON válido. Verifica se o método retorna a lista correta.
+     - **GetByIdAsync (Sucesso):** Simula HTTP 200. Verifica o objeto retornado.
+     - **GetByIdAsync (Erro 404):** Simula HTTP 404. Verifica se o serviço lança a exceção esperada (`HttpRequestException`).
+     - **CreateAsync (Sucesso):** Simula HTTP 201 (Created). Verifica se o método foi chamado corretamente.
+     - **Tratamento de Erros:** Garante que o `EnsureSuccessStatusCode` do serviço está a funcionar, testando um retorno 500 (Internal Server Error).
+
+  3. **Verificações (Asserts):**
+     - Verifica se o resultado não é nulo.
+     - Verifica se os métodos do `HttpMessageHandler` foram chamados exatamente uma vez (Verify).
+     - Verifica se o Logger foi chamado (opcional, mas recomendado).
+
+  **Saída Esperada:**
+  - Fornece apenas o código da classe de teste: `{serviceName}Tests.cs`.
+  - Inclui os `usings` necessários (`Xunit`, `Moq`, `Moq.Protected`, `System.Net`, etc.).
+  - O código deve estar pronto a compilar.
+
+metadata:
+  description: "Gera testes unitários xUnit com Mock de HttpClient e Options."
+  tags:
+    - "dotnet"
+    - "xunit"
+    - "moq"
+    - "testing"
+  model_config:
+    recommended_model: "gpt-4"
+    temperature: 0.1
+  version: "1.0.0"
